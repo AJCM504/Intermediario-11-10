@@ -1,0 +1,52 @@
+﻿<Window x:Class="Intermediario.AgregarProductosVendedor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Intermediario"
+        mc:Ignorable="d"
+        Title="AgregarProductosVendedor" Height="700" Width="1000" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid x:Name="grdBase">
+        <Grid Height="350" Width="700" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,43" Background="Gray">
+            <Image x:Name="imgImagenesProductos"/>
+            <WrapPanel VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,5">
+                <Button Content="Anterior" Name="btnFotoAnterior" Margin="0,0,10,0" Click="btnFotoAnterior_Click" Cursor="Hand"/>
+                <Button Content="Agregar Foto" Margin="0,0,10,0" Click="Button_Click"/>
+                <Button Content="Siguiente" Name="btnFotoSiguiente" Click="btnFotoSiguiente_Click"/>
+            </WrapPanel>
+        </Grid>
+        <Grid HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="175" Width="425" Margin="0,0,50,85" Background="Gray">
+
+            <Label Content="Descricpión:" Margin="0,10,10,0"/>
+            <TextBox x:Name="txtDescripcionn" Margin="10,38,10,96"/>
+
+        </Grid>
+        <Grid HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="175" Width="425" Margin="50,85" Background="Gray">
+            <WrapPanel>
+                <Label Content="Nombre" Margin="0,10,10,0"/>
+                <TextBox x:Name="txtNombreProducto" Width="350" Margin="0,10,10,0" UndoLimit="30"/>
+
+                <Label Content="Categoria" Margin="0,10,10,0"/>
+                <TextBox x:Name="txtCategoria" Width="343" Margin="0,10,10,0"/>
+
+                <Label Content="Precio" Margin="0,10,10,0"/>
+                <TextBox x:Name="txtPrecio" Width="55" Margin="0,10,10,0"/>
+
+                <Label Content="Marca" Margin="0,10,10,0"/>
+                <TextBox x:Name="txtMarca" Width="81" Margin="0,10,10,0" UndoLimit="30"/>
+
+                <Label Content="Modelo" Margin="0,10,10,0"/>
+                <TextBox x:Name="txtModelo" Width="96"/>
+
+                <Label Content="Cantidad" Margin="0,10,10,0"/>
+                <TextBox x:Name="txtCantidad" Width="106" Margin="0,10,10,0"/>
+
+
+            </WrapPanel>
+        </Grid>
+        <WrapPanel Name="wrpBotones" VerticalAlignment="Bottom" HorizontalAlignment="Center" Height="30" Width="386" Margin="0,6,0,25">
+            <Button x:Name="btnCancelarProducto" Content="Cancelar" HorizontalAlignment="Right" Background="Red" Margin="65,0,0,0" Click="btnCancelarProducto_Click"/>
+            <Button x:Name="btnGuardarProducto" Content="Publicar" Margin="75,0,0,0" Cursor="Hand"/>
+        </WrapPanel>
+    </Grid>
+</Window>

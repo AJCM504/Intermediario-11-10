@@ -1,0 +1,30 @@
+﻿<Window x:Class="Intermediario.CarritodeCompras"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="CarritodeCompras" Height="520.546" Width="800" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
+    <Grid>
+        <Grid Background="SlateGray">
+            <Label Content="Mi carrito de compras:" HorizontalAlignment="Left" Margin="10,32,0,0" VerticalAlignment="Top" FontSize="14" Foreground="White"/>
+            <WrapPanel Height="358" Margin="488,81,42,0" VerticalAlignment="Top" Background="White"></WrapPanel>
+            <Label Content="Detalle Total" HorizontalAlignment="Left" Margin="507,167,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+            <Label Content="Impuestos:" HorizontalAlignment="Left" Margin="507,196,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+            <Label Name="lblImpuestos" Content="" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="680,196,0,0" FontWeight="Bold"/>
+            <Label Content="Cargos por Entrega:" HorizontalAlignment="Left" Margin="507,225,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+            <Label x:Name="lblDetalleTotalCarrito" Content="" HorizontalAlignment="Left" Margin="680,225,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+            <Label x:Name="lblTotalCarrito" Content="" HorizontalAlignment="Left" Margin="680,317,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+            <Label x:Name="lblCargosCarrito" Content="" HorizontalAlignment="Left" Margin="699,225,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+            <Label Content="______________________________________________________" HorizontalAlignment="Left" Margin="507,266,0,0" VerticalAlignment="Top" FontSize="18" FontWeight="Bold"/>
+            <Label Content="Total:" HorizontalAlignment="Left" Margin="507,317,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
+            <Button Content="Cancelar" HorizontalAlignment="Left" Margin="507,372,0,0" VerticalAlignment="Top" Width="100" Click="Button_Click"/>
+            <Button Content="Pagar" HorizontalAlignment="Left" Margin="623,372,0,0" VerticalAlignment="Top" Background="ForestGreen" Width="100"/>
+        </Grid>
+        <ScrollViewer Name="scrProductos" Width="466" Height="420" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,70">
+            <StackPanel x:Name="stckProductos" Width="466" Height="420" HorizontalAlignment="Left" VerticalAlignment="Top" Background="White">
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>
