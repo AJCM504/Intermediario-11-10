@@ -66,6 +66,7 @@ namespace Intermediario
 
                     grid.Height = 227;
                     grid.Width = 371;
+                    
 
                     imagen.Height = 150;
                     imagen.Margin = new Thickness(0, -30, 0, 0);
@@ -95,6 +96,13 @@ namespace Intermediario
                     wrpProductos.Children.Add(boton);
 
                     control = Convert.ToInt32(reader["IDProducto"]);
+                }
+
+                List<Button> botones =  wrpProductos.Children.OfType<Button>().ToList();
+
+                foreach (Button btn in botones)
+                {
+                    wrpProductos.Children.Remove(btn);
                 }
 
                 contador++;

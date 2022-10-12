@@ -31,17 +31,17 @@ namespace Intermediario
         public SqlConnection conexion()
         {
 
-            try
-            {
+            /*try
+            {*/
                 cn.ConnectionString = cadenaConexion;
                 cn.Open();
-                //MessageBox.Show("Se estableccio la conexion.");
-            }
+                
+            /*}
             catch
             {
                 MessageBox.Show("Error en la cadena de conexion.");
-                Application.Current.Shutdown();
-            }
+                //Application.Current.Shutdown();
+            }*/
 
 
             return cn;

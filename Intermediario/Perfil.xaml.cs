@@ -80,7 +80,7 @@ namespace Intermediario
             }
             else if (!registroCampos.VerificarNumeroMovil(txtTelefonoPerfil.Text))
             {
-                System.Windows.MessageBox.Show("Numero de Telefono incorrecto 2");
+                System.Windows.MessageBox.Show("Numero de Telefono incorrecto");
             }
             else
             {

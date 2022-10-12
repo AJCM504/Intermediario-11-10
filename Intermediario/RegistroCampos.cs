@@ -135,7 +135,7 @@ namespace Intermediario
         {
             
             string codigoMovil = numero.Substring(0,1);
-            MessageBox.Show(codigoMovil);
+            
 
             if (codigoMovil != "9" && codigoMovil != "8" && codigoMovil != "7" && codigoMovil != "3")
             {

@@ -23,11 +23,14 @@ namespace Intermediario
     /// </summary>
     public partial class AgregarProductosVendedor : Window
     {
+        ConexionBD conexionBD = new ConexionBD();
+
         string nombreProducto, precio, marca, modelo, cantidad, descripcion;
 
         Imagenes imag = new Imagenes();
 
         List<byte[]> imagen1 = new List<byte[]>();
+        List<int> idFotos = new List<int>();
         BitmapImage imagenBitMap = null;
         int contador, contadorAux, imageCount;
         int imagenesCapt;
@@ -53,7 +56,7 @@ namespace Intermediario
             {
 
 
-                ConexionBD conexionBD = new ConexionBD();
+                
                 string consul = "SELECT NombreCategoria FROM Categoria ORDER BY IDCategoria ASC";
 
                 SqlCommand cmd1 = new SqlCommand(consul, conexionBD.conexion());
@@ -70,7 +73,7 @@ namespace Intermediario
                     idProducto += id[i];
                 }
 
-                //MessageBox.Show(idProducto);
+                
 
                 if (id != "0")
                 {
@@ -110,6 +113,7 @@ namespace Intermediario
                         do
                         {
                             imagen1.Add((byte[])reader["FotoProducto"]);
+                            idFotos.Add((int)reader["IDFoto"] * -1);
                             imagenesCapt++;
                             //MessageBox.Show(Convert.ToString(imagen1.Count));
                         } while (reader.Read());
@@ -119,6 +123,10 @@ namespace Intermediario
 
                         imagenBitMap = imag.imageFromByte(imagen1[0]);
                         imgImagenesProductos.Source = imagenBitMap;
+
+
+
+
                     } //Carga de la informacion del producto
 
                     if (datosPersonales.TipoCuenta == 1)
@@ -131,7 +139,8 @@ namespace Intermediario
                         txtCantidad.IsEnabled = false;
                         txtDescripcionn.IsEnabled = false;
 
-                        
+                        btnEliminar.Visibility = Visibility.Hidden;
+                        btnEliminar.IsEnabled = false;
 
                         btnAgregarFoto.IsEnabled = false;
                         btnAgregarFoto.Opacity = 0;
@@ -148,7 +157,7 @@ namespace Intermediario
                         btnEliminar.Margin = new Thickness(220, 0, 0, 25);
                         btnEliminar.Height = 30;
                         btnEliminar.Width = 100;
-                        btnEliminar.Click += new RoutedEventHandler(Eliminar);
+                        
 
                         btnGuardarProducto.Margin = new Thickness(65, 0, 0, 0);
                         btnGuardarProducto.Content = "Guardar";
@@ -164,11 +173,12 @@ namespace Intermediario
                     btnGuardarProducto.Click += new RoutedEventHandler(btnGuardarProducto_Click);
                 }
 
-                if (imagen1.Count == 0)
+                if (imagen1.Count == 0 || imagen1.Count == 1)
                 {
                     btnFotoSiguiente.IsEnabled = false;
                     btnFotoAnterior.IsEnabled = false;
                 }
+
 
             }
             catch
@@ -259,9 +269,8 @@ namespace Intermediario
             try
             {
 
-
-                if (imagen1.Count != 1)
-                {
+                /*if (imagen1.Count == 1)
+                {*/
 
                     imageCount = imagen1.Count;
                     if (contador >= (imagen1.Count - 1))
@@ -276,13 +285,15 @@ namespace Intermediario
                         imagenBitMap = imag.imageFromByte(imagen1[contador]);
                         imgImagenesProductos.Source = imagenBitMap;
                     }
-                }
+                /*}
                 else
                 {
                     btnFotoSiguiente.IsEnabled = false;
-                }
+                }*/
             }
-            catch{    }
+            catch{
+                MessageBox.Show("Algo salio mal :(");
+            }
         }
 
         /// <summary>
@@ -363,6 +374,7 @@ namespace Intermediario
                 imgImagenesProductos.Source = new BitmapImage(fileuri);
                 //byte[] imagen = ConvertirImg(openFielDialog.FileName);
                 imagen1.Add(File.ReadAllBytes(openFielDialog.FileName));
+                idFotos.Add(idFotos.Count);
                 contadorAux++;
                 contador = contadorAux;
 
@@ -385,36 +397,43 @@ namespace Intermediario
         /// <param name="e"></param>
         private void Cambios(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                if (VerificarCambios(nombreProducto, precio, marca, modelo, cantidad, descripcion))
+            /*try
+            {*/
+                if (!VerificarCambios(nombreProducto, precio, marca, modelo, cantidad, descripcion, imagen1))
                 {
                     ConexionBD bdConexion = new ConexionBD();
 
                     string consulta = "EXECUTE ModificarProducto @ID, @NOMBRE, @IDCATEGORIA, @DESCRIPCIONPRODUCTO, @PRECIOPRODUCTO, @MARCA, @MODELOPRODUCTO";
 
+                    bdConexion.CerrarConexion();
                     SqlCommand cmd = new SqlCommand(consulta, bdConexion.conexion());
                     cmd.Parameters.AddWithValue("@ID", idProducto);
                     cmd.Parameters.AddWithValue("@nombre", txtNombreProducto.Text);
                     cmd.Parameters.AddWithValue("@IDCATEGORIA", txtCategoria.SelectedIndex + 1);
                     cmd.Parameters.AddWithValue("@DESCRIPCIONPRODUCTO", txtDescripcionn.Text);
-                    cmd.Parameters.AddWithValue("@PRECIOPRODUCTO", Convert.ToInt32(txtPrecio.Text));
+                    cmd.Parameters.AddWithValue("@PRECIOPRODUCTO", Convert.ToDouble(txtPrecio.Text));
                     cmd.Parameters.AddWithValue("@MARCA", txtMarca.Text);
                     cmd.Parameters.AddWithValue("@MODELOPRODUCTO", txtModelo.Text);
                     cmd.ExecuteScalar();
 
-                    if (imagen1.Count < imagenesCapt)
-                    {
-                        for (int i = imagenesCapt + 1; i < imagen1.Count; i++)
-                        {
+                //MessageBox.Show(Convert.ToString(imagen1.Count) + ":Cantidad de imagenes y " + 
+                    //Convert.ToString(imagenesCapt));
 
-                            consulta = "INSERT INTO [Foto de Producto](IDProducto,FotoProducto) values(@ID,@FOTO)";
+                    if (imagen1.Count > imagenesCapt)
+                    {
+                        for (int i = imagenesCapt; i < imagen1.Count; i++)
+                        {
+                        bdConexion.CerrarConexion();
+                            consulta = "INSERT INTO [Foto Producto](IDProducto,FotoProducto) values(@ID,@FOTO)";
                             SqlCommand cmd2 = new SqlCommand(consulta, bdConexion.conexion());
                             cmd2.Parameters.AddWithValue("ID", idProducto);
                             cmd2.Parameters.AddWithValue("@FOTO", imagen1[i]);
                             cmd2.ExecuteScalar();
 
+                        MessageBox.Show("Se guardo la foto");
                         }
+
+                        
 
                         if (imagen1.Count > 1)
                         {
@@ -425,11 +444,15 @@ namespace Intermediario
                     }
                 }
                 MessageBox.Show("Se han realizado los cambios.");
-            }
+
+            var window = new MarketplaceVendedor();
+            this.Close();
+            window.Show();
+            /*}
             catch
             {
                 MessageBox.Show("No fue posible conectarse a la base de datos. Intentelo de nuevo mas tarde.");
-            }
+            }*/
         }
 
         /// <summary>
@@ -469,14 +492,107 @@ namespace Intermediario
 
         }
 
-        private void txtPrecio_KeyDown(object sender, KeyEventArgs e)
+        private void btnEliminarFoto_Click(object sender, RoutedEventArgs e)
         {
-            
+            MessageBox.Show(Convert.ToString(idFotos[contador]));
+
+            if (idFotos[contador] < 0)
+            {
+                string consulta = "DELETE FROM [Foto Producto] where IDfoto=@IDFOTO";
+
+                conexionBD.CerrarConexion();
+                SqlCommand cmd = new SqlCommand(consulta, conexionBD.conexion());
+                cmd.Parameters.AddWithValue("@IDFOTO", idFotos[contador] * -1);
+                cmd.ExecuteScalar();
+
+                idFotos.RemoveAt(contador);
+                imagen1.RemoveAt(contador);
+                contador--;
+                btnFotoSiguiente.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+                
+            }
+            else
+            {
+                imagen1.RemoveAt(contador);
+                idFotos.RemoveAt(contador);
+                contador--;
+                btnFotoSiguiente.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            }
+
+            if (imagen1.Count == 0 || imagen1.Count == 1)
+            {
+                btnFotoSiguiente.IsEnabled = false;
+                btnFotoAnterior.IsEnabled = false;
+            }
+
         }
 
-        private void txtCantidad_TextChanged(object sender, TextChangedEventArgs e)
+        private void BtnEliminar_MouseEnter(object sender, MouseEventArgs e)
+        {
+            //this.Background = new SolidColorBrush(Colors.Blue);
+
+        }
+
+        private void btnEliminar_MouseLeave(object sender, MouseEventArgs e)
+        {
+            //this.Background = new SolidColorBrush(Colors.Red);
+        }
+        /// <summary>
+        /// Evento click del boton eliminar del formulario AgregarProductoVendedor.
+        /// Obtiene el id del producto a eliminar y cambia la columna IDEstadoProducto de la tabla [Datos Comprador]
+        /// a 2. En caso de tener un id=0 solo limpia los campos.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnEliminar_Click(object sender, RoutedEventArgs e)
         {
 
+            try
+            {
+
+                System.Windows.Forms.DialogResult res = (System.Windows.Forms.DialogResult)System.Windows.MessageBox.Show("¿Desea eliminar este producto?", "Confirmación", MessageBoxButton.OKCancel);
+
+
+
+                if (res == System.Windows.Forms.DialogResult.OK && idProducto != "0")
+                {
+                    MessageBox.Show(idProducto);
+                    conexionBD.CerrarConexion();
+                    string consulta = "UPDATE [Datos Producto] SET IDEstadoProducto = 2 where IDProducto=@IDPRODUCTO";
+                    SqlCommand cmd1 = new SqlCommand(consulta, conexionBD.conexion());
+                    cmd1.Parameters.AddWithValue("@IDPRODUCTO", idProducto);
+                    cmd1.ExecuteScalar();
+                    conexionBD.CerrarConexion();
+
+                    MessageBox.Show("Se elimino el producto");
+
+                    var window = new MarketplaceVendedor();
+                    this.Close();
+                    window.Show();
+
+                }
+                if (res == System.Windows.Forms.DialogResult.OK && idProducto == "0")
+                {
+                    
+
+                    txtNombreProducto.Text = String.Empty;
+                    txtPrecio.Text = String.Empty;
+                    txtMarca.Text = String.Empty;
+                    txtModelo.Text = String.Empty;
+                    txtCantidad.Text = String.Empty;
+                    txtDescripcionn.Text = String.Empty;
+                    txtCategoria.SelectedIndex = -1;
+
+                    var window = new MarketplaceVendedor();
+                    this.Close();
+                    window.Show();
+                }
+            }
+            catch
+            {
+                MessageBox.Show("No fue posible eliminar el producto, Intentelo mas tarde");
+            }
         }
 
         /// <summary>
@@ -540,40 +656,6 @@ namespace Intermediario
         }
 
         /// <summary>
-        /// Evento click del boton dinamico.
-        /// Obtiene el id obtenido como paramentro del formulario y cambia el estado del producto en la base de datos
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Eliminar(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-
-
-                string consulta = "UPDATE [Datos Producto] SET IDEstadoProducto=2 WHERE IDProducto = @ID";
-
-                ConexionBD bdConexion = new ConexionBD();
-
-                SqlCommand cmd = new SqlCommand(consulta, bdConexion.conexion());
-                cmd.Parameters.AddWithValue("@ID", idProducto);
-                cmd.ExecuteScalar();
-
-                MessageBox.Show("El producto a sido eliminado.");
-
-
-                var window = new MarketplaceVendedor();
-                this.Close();
-                window.Show();
-            }
-            catch
-            {
-                MessageBox.Show("No fue posible conectarse a la base de datos. Intentelo de nuevo mas tarde.");
-            }
-
-        }
-
-        /// <summary>
         /// Evento click de boton dinamico.
         /// Obtiene el id del producto y lo agrega a la base de datos en la tabla de FacturaDetalle
         /// segun el id del usuario y la factura que tenga pendiente.
@@ -605,7 +687,7 @@ namespace Intermediario
         }
 
         
-        private Boolean VerificarCambios(string nombre, string precio, string marca, string modelo, string cantidad, string descripcion)
+        private Boolean VerificarCambios(string nombre, string precio, string marca, string modelo, string cantidad, string descripcion, List<byte[]> imagenesBD)
         {
 
             if(nombre == txtNombreProducto.Text)
@@ -629,6 +711,10 @@ namespace Intermediario
                 return false;
             }
             else if (descripcion == txtDescripcionn.Text)
+            {
+                return false;
+            }
+            if(imagenesBD == imagen1)
             {
                 return false;
             }

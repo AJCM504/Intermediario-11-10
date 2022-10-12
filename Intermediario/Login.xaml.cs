@@ -104,7 +104,7 @@ namespace Intermediario
                         datosPersonales.Direccion = Convert.ToString(reader[6]);
                         datosPersonales.Id = Convert.ToString(reader[0]);
 
-                        //MessageBox.Show(Convert.ToString(reader[1]));
+                        
                     }
 
                     //Mostramos el formulario de comprador.
@@ -140,7 +140,7 @@ namespace Intermediario
                         datosPersonales.Direccion = Convert.ToString(reader[6]);
                         datosPersonales.Id = Convert.ToString(reader[0]);
 
-                        MessageBox.Show(Convert.ToString(reader[1]));
+                        
                     }
 
 

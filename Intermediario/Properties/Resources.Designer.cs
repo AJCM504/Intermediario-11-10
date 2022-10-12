@@ -71,6 +71,26 @@ namespace Intermediario.Properties {
         }
         
         /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Flecha_Derecha {
+            get {
+                object obj = ResourceManager.GetObject("Flecha_Derecha", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Flecha_Izquierda {
+            get {
+                object obj = ResourceManager.GetObject("Flecha_Izquierda", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Icon similar a (Icono).
         /// </summary>
         internal static System.Drawing.Icon logo_inter_actualizado {
@@ -141,6 +161,16 @@ namespace Intermediario.Properties {
         internal static string plantillaFactura {
             get {
                 return ResourceManager.GetString("plantillaFactura", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Signo_Mas {
+            get {
+                object obj = ResourceManager.GetObject("Signo_Mas", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }
